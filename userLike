@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Add-on Test</title></head>
+<body>
+  <h3>Eventos</h3>
+  <div id="log" style="height:250px;overflow:auto;border:1px solid #ccc;padding:10px;font-family:monospace;font-size:12px;"></div>
+  <h3>Acciones</h3>
+  <button onclick="toast()">Toast</button>
+  <button onclick="chat()">Insertar Texto</button>
+  <script>
+    window.parent.postMessage({name:"ready",payload:{}},"*");
+    window.addEventListener("message",e=>{
+      if(!e.data||!e.data.name)return;
+      document.getElementById("log").innerHTML=`<b>${e.data.name}</b><pre>${JSON.stringify(e.data.payload,null,2).slice(0,400)}</pre><hr>`+document.getElementById("log").innerHTML;
+    });
+    function toast(){window.parent.postMessage({name:"toast",payload:{message:"Hola!",status:"success"}},"*");}
+    function chat(){window.parent.postMessage({name:"replace_chat_input",payload:{textFormat:"plain_text",message:"Texto de prueba"}},"*");}
+  </script>
+</body>
+</html>
